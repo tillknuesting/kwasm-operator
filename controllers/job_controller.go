@@ -62,7 +62,8 @@ func (r *JobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 		return ctrl.Result{}, err
 	}
 
-	if job.Labels["kwasm.sh/job"] != "true" {
+	if _, ok := job.Labels["kwasm.sh/job"]; !ok || job.Labels["kwasm.sh/job"] != "true" {
+		log.Info().Str("job", job.Name).Msg("kwasm.sh/job label is not present or not set to true, returning.")
 		return ctrl.Result{}, nil
 	}
 
