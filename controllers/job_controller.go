@@ -66,7 +66,7 @@ func (r *JobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 		return ctrl.Result{}, nil
 	}
 
-	_, finishedType := r.isJobFinished(job)
+	finishedType := r.isJobFinished(job)
 	switch finishedType {
 	case "": // ongoing
 		log.Info().Msgf("Job %s is still Ongoing", job.Name)
@@ -82,14 +82,14 @@ func (r *JobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	return ctrl.Result{}, nil
 }
 
-func (r *JobReconciler) isJobFinished(job *batchv1.Job) (bool, batchv1.JobConditionType) {
+func (r *JobReconciler) isJobFinished(job *batchv1.Job) batchv1.JobConditionType {
 	for _, c := range job.Status.Conditions {
 		if (c.Type == batchv1.JobComplete || c.Type == batchv1.JobFailed) && c.Status == corev1.ConditionTrue {
-			return true, c.Type
+			return c.Type
 		}
 	}
 
-	return false, ""
+	return ""
 }
 
 // SetupWithManager sets up the controller with the Manager.
