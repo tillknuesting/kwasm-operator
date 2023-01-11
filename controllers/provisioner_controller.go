@@ -113,7 +113,6 @@ func (r *ProvisionerReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 			log.Err(err).Msg("Failed to create new Job " + req.Namespace + " Job.Name " + req.Name)
 			return ctrl.Result{}, err
 		}
-
 	} else if !r.AutoProvision {
 		// If the label should not be set but is, remove it.
 		delete(node.Labels, nodeNameLabel)
@@ -149,7 +148,6 @@ func (r *ProvisionerReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 }
 
 func (r *ProvisionerReconciler) deployJob(n *corev1.Node, req ctrl.Request) *batchv1.Job {
-
 	priv := true
 
 	dep := &batchv1.Job{
@@ -202,7 +200,6 @@ func (r *ProvisionerReconciler) deployJob(n *corev1.Node, req ctrl.Request) *bat
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *ProvisionerReconciler) SetupWithManager(mgr ctrl.Manager) error {
-
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&corev1.Node{}).
 		Complete(r)
