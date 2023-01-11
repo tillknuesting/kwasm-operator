@@ -69,13 +69,13 @@ func (r *JobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	finishedType := r.isJobFinished(job)
 	switch finishedType {
 	case "": // ongoing
-		log.Info().Msgf("Job %s is still Ongoing", job.Name)
+		log.Info().Str("job", job.Name).Msg("is still ongoing")
 		return ctrl.Result{}, nil
 	case batchv1.JobFailed:
-		log.Info().Msgf("Job %s is still failing...", job.Name)
+		log.Info().Str("job", job.Name).Msg("is still failing")
 		return ctrl.Result{}, nil
 	case batchv1.JobComplete:
-		log.Info().Msgf("Job %s is Completed. Happy WASMing", job.Name)
+		log.Info().Str("job", job.Name).Msg("is completed. Happy WASMing")
 		return ctrl.Result{}, nil
 	}
 
